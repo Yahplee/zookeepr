@@ -11,6 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
 
+// tells where express to look at for js and css and images
+app.use(express.static("public"));
+
 function filterByQuery(query, animalsArray) {
 	let personalityTraitsArray = [];
 
@@ -115,6 +118,24 @@ app.post("/api/animals", (req, res) => {
 		const animal = createNewAnimal(req.body, animals);
 		res.json(animal);
 	}
+});
+
+// making the html page as the root folder of server
+app.get("/", (req, res) => {
+	res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+app.get("/animals", (req, res) => {
+	res.sendFile(path.join(__dirname, "./public/animals.html"));
+});
+
+app.get("/zookeepers", (req, res) => {
+	res.sendFile(path.join(__dirname, "./public/zookeepers.html"));
+});
+
+// wildcard route that redirects any route not specified to the index page
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 app.listen(3001, () => {
