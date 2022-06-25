@@ -22,6 +22,7 @@ function filterByQuery(query, animalsArray) {
 		});
 	}
 
+	// query for name, die, and species
 	if (query.diet) {
 		filteredResults = filteredResults.filter(
 			(animal) => animal.diet === query.diet
@@ -40,6 +41,12 @@ function filterByQuery(query, animalsArray) {
 	return filteredResults;
 }
 
+// function for animal id with filter
+function findById(id, animalsArray) {
+	const result = animalsArray.filter((animal) => animal.id === id)[0];
+	return result;
+}
+
 app.get("/api/animals", (req, res) => {
 	let results = animals;
 
@@ -48,6 +55,16 @@ app.get("/api/animals", (req, res) => {
 	}
 
 	res.json(results);
+});
+
+// to get the animal through id in particular
+app.get("/api/animals/:id", (req, res) => {
+	const result = findById(req.params.id, animals);
+	if (result) {
+		res.json(result);
+	} else {
+		res.send(404);
+	}
 });
 
 const PORT = process.env.PORT || 3001;
